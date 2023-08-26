@@ -1,12 +1,15 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./User.js";
 import { Job } from "./Job.js";
 
 @Entity('company_profiles')
 export class CompanyProfile extends BaseEntity {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
   @OneToOne(() => User)
-  @PrimaryColumn()
-  employerId: string;
+  @JoinColumn()
+  user: User;
 
   @Column({ nullable: false })
   cvUrl: string;
