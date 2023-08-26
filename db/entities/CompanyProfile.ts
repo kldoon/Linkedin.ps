@@ -12,9 +12,6 @@ export class CompanyProfile extends BaseEntity {
   user: User;
 
   @Column({ nullable: false })
-  cvUrl: string;
-
-  @Column({ nullable: false })
   name: string;
 
   @Column({ nullable: false })

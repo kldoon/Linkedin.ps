@@ -5,6 +5,7 @@ import dataSource from './db/dataSource.js';
 
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
+import jobsRouter from './routes/jobs.js';
 
 var app = express();
 
@@ -16,6 +17,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/jobs', jobsRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

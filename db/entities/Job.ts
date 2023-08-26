@@ -24,7 +24,7 @@ export class Job extends BaseEntity {
   @Column({ nullable: false, type: 'text' })
   description: string;
 
-  @Column({ nullable: false, type: 'text' })
+  @Column({ nullable: true, type: 'text' })
   requirements: string;
 
   @Column({ nullable: true, type: 'int' })
