@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { validateJob } from '../middlewares/validation/job.js';
-import { insertJob } from '../controllers/job.js';
+import { getAllJobs, insertJob } from '../controllers/job.js';
 var router = express.Router();
 
 router.post('/', validateJob, (req, res, next) => {
@@ -14,7 +14,19 @@ router.post('/', validateJob, (req, res, next) => {
 });
 
 router.get('/', (req, res, next) => {
-  res.send('respond with a resource');
+  const payload = {
+    page: req.query.page?.toString() || '1',
+    pageSize: req.query.pageSize?.toString() || '10'
+  };
+
+  getAllJobs(payload)
+    .then(data => {
+      res.send(data);
+    })
+    .catch(error => {
+      console.error(error);
+      res.status(500).send('Something went wrong')
+    });
 });
 
 export default router;

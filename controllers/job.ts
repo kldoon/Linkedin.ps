@@ -6,4 +6,24 @@ const insertJob = (payload: Job) => {
   return newJob.save();
 }
 
-export { insertJob }
+const getAllJobs = async (payload: GetAll) => {
+  const page = parseInt(payload.page);
+  const pageSize = parseInt(payload.pageSize);
+
+  const [jobs, total] = await Job.findAndCount({
+    skip: pageSize * (page - 1),
+    take: pageSize,
+    order: {
+      createdAt: 'ASC'
+    },
+  })
+
+  return {
+    page,
+    pageSize: jobs.length,
+    total,
+    jobs
+  };
+}
+
+export { insertJob, getAllJobs }

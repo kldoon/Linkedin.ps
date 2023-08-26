@@ -9,7 +9,7 @@ import jobsRouter from './routes/jobs.js';
 
 var app = express();
 
-const PORT = 3000;
+const PORT = 5000;
 
 app.use(logger('dev'));
 app.use(express.json());
