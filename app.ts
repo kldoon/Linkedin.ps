@@ -1,6 +1,7 @@
 import createError from 'http-errors';
 import express from 'express';
 import logger from 'morgan';
+import cors from 'cors';
 import dataSource from './db/dataSource.js';
 
 import indexRouter from './routes/index.js';
@@ -10,6 +11,10 @@ import jobsRouter from './routes/jobs.js';
 var app = express();
 
 const PORT = 5000;
+
+app.use(cors({
+  origin: "http://localhost:3000",
+}));
 
 app.use(logger('dev'));
 app.use(express.json());
