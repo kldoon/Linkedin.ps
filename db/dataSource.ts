@@ -21,7 +21,7 @@ const dataSource = new DataSource({
   ],
   migrations: ['./**/migration/*.ts'],
   synchronize: true,
-  logging: true
+  logging: false
 });
 
 dataSource.initialize().then(() => {
