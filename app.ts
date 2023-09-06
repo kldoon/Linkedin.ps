@@ -11,6 +11,11 @@ import dataSource from './db/dataSource.js';
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 import jobsRouter from './routes/jobs.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 var app = express();
 
@@ -30,11 +35,11 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/jobs', jobsRouter);
@@ -56,9 +61,6 @@ app.get('/file', (req, res) => {
   try {
     const data = fs.readFileSync('uploads/' + fileName, 'utf-8');
     const JSONData = JSON.parse(data) as any[];
-    console.log("-----------------------");
-    console.log(JSONData[0].author);
-    console.log("-----------------------");
     res.send(JSONData);
   } catch (error) {
     console.error(error);
@@ -78,19 +80,13 @@ app.use((err: any, req: any, res: any, next: any) => {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+  res.status(err.status || 500).send(err);
 });
 
 
 app.listen(PORT, () => {
   logger(`App is listening on port ${PORT}`);
   console.log(`App is listening on port ${PORT}`);
-
-  console.log("------------");
-  console.log(process.env.NODE_ENV);
-  console.log(process.env.DB_TEMP);
-  console.log("------------");
 });
 
 export default app;
