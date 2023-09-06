@@ -1,10 +1,12 @@
+import './config.js';
 import createError from 'http-errors';
 import express from 'express';
 import logger from 'morgan';
 import cors from 'cors';
-import dataSource from './db/dataSource.js';
 import multer from 'multer';
 import fs from 'fs';
+
+import dataSource from './db/dataSource.js';
 
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
@@ -84,6 +86,11 @@ app.use((err: any, req: any, res: any, next: any) => {
 app.listen(PORT, () => {
   logger(`App is listening on port ${PORT}`);
   console.log(`App is listening on port ${PORT}`);
+
+  console.log("------------");
+  console.log(process.env.NODE_ENV);
+  console.log(process.env.DB_TEMP);
+  console.log("------------");
 });
 
 export default app;
