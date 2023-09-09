@@ -4,6 +4,8 @@ import { CompanyProfile } from "./entities/CompanyProfile.js";
 import { EmployeeProfile } from "./entities/EmployeeProfile.js";
 import { Job } from "./entities/Job.js";
 import { User } from "./entities/User.js";
+import { Role } from "./entities/Role.js";
+import { Permission } from "./entities/Permission.js";
 
 const dataSource = new DataSource({
   type: 'mysql',
@@ -17,7 +19,9 @@ const dataSource = new DataSource({
     CompanyProfile,
     EmployeeProfile,
     Job,
-    User
+    User,
+    Role,
+    Permission
   ],
   migrations: ['./**/migration/*.ts'],
   synchronize: true,
