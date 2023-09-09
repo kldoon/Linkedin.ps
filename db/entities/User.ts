@@ -24,12 +24,12 @@ export class User extends BaseEntity {
 
   @Column({
     type: 'enum',
-    enum: ['employee', 'employer'],
+    enum: ['employee', 'employer', 'admin'],
     default: 'employee'
   })
-  type: 'employee' | 'employer';
+  type: 'employee' | 'employer' | 'admin';
 
-  @ManyToOne(() => Role, role => role.users, { cascade: true, eager: true })
+  @ManyToOne(() => Role, role => role.users, { cascade: true, eager: true, nullable: true })
   @JoinColumn()
   role: Role;
 

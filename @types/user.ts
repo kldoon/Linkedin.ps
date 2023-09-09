@@ -1,7 +1,10 @@
+import { Role } from "../db/entities/Role.js";
+
 export namespace NSUser {
   export enum Type {
     company = 'employer',
-    employee = 'employee'
+    employee = 'employee',
+    admin = 'admin',
   }
 
   export interface Item {
@@ -13,5 +16,16 @@ export namespace NSUser {
     description?: string;
     type: Type;
     createdAt: Date;
+  }
+
+  export interface Role {
+    id: number;
+    name: string;
+    permissions: number[];
+  }
+  
+  export interface Permission {
+    id: number;
+    name: string;
   }
 }

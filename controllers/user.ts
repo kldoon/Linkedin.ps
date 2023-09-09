@@ -4,12 +4,20 @@ import { EmployeeProfile } from "../db/entities/EmployeeProfile.js";
 import { CompanyProfile } from "../db/entities/CompanyProfile.js";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import { In } from "typeorm";
 
 import dataSource from "../db/dataSource.js";
+import { Role } from "../db/entities/Role.js";
+import { Permission } from "../db/entities/Permission.js";
 
 const insertUser = (payload: NSUser.Item) => {
   return dataSource.manager.transaction(async transaction => {
-    const newUser = User.create(payload);
+    const role = await Role.findOneBy({ name: payload.type });
+    const newUser = User.create({
+      ...payload,
+      role: role as Role
+    });
+
     await transaction.save(newUser);
     if (payload.type === 'employee') {
       const employee = EmployeeProfile.create({
@@ -57,7 +65,41 @@ const login = async (email: string, password: string) => {
   }
 }
 
+const insertRole = async (payload: NSUser.Role) => {
+  try {
+    const role = new Role();
+    role.name = payload.name;
+    role.permissions = await Permission.findBy({
+      id: In(payload.permissions)
+    });
+    await role.save();
+    return role;
+  } catch (error) {
+    throw ("Something went wrong");
+  }
+}
+
+const insertPermission = async (payload: NSUser.Permission) => {
+  try {
+    const permission = Permission.create({
+      name: payload.name
+    });
+    await permission.save();
+    return permission;
+  } catch (error) {
+    console.log(error);
+    throw ("Something went wrong");
+  }
+}
+
+const getRoles = () => {
+  return Role.find();
+}
+
 export {
   insertUser,
-  login
+  login,
+  insertRole,
+  insertPermission,
+  getRoles
 }

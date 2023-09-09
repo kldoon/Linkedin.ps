@@ -17,7 +17,7 @@ export class Role extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
   @ManyToMany(() => Permission, { cascade: true, eager: true })
