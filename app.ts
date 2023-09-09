@@ -13,6 +13,7 @@ import usersRouter from './routes/users.js';
 import jobsRouter from './routes/jobs.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { authenticate } from './middlewares/auth/authenticate.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -42,7 +43,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/jobs', jobsRouter);
+app.use('/jobs', authenticate, jobsRouter);
 
 app.post('/upload', upload.single('file'), (req, res) => {
   if (!req.file) {

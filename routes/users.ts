@@ -15,6 +15,7 @@ router.post('/', validateUser, (req, res, next) => {
 router.post('/login', (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
+
   login(email, password)
     .then(data => {
       res.send(data);
