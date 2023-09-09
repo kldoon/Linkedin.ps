@@ -1,7 +1,8 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
+import { User } from '../../db/entities/User.js';
 
-const authenticate = (
+const authenticate = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
@@ -13,8 +14,9 @@ const authenticate = (
   } catch (error) { }
 
   if (tokenIsValid) {
-    const decoded = jwt.decode(token);
-    res.locals.user = decoded;
+    const decoded = jwt.decode(token, { json: true });
+    const user = await User.findOneBy({ email: decoded?.email || '' })
+    res.locals.user = user;
     next();
   } else {
     res.status(401).send("You are Unauthorized!");

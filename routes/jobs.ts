@@ -2,9 +2,10 @@ import express from 'express';
 
 import { validateJob } from '../middlewares/validation/job.js';
 import { getAllJobs, insertJob } from '../controllers/job.js';
+import { authorize } from '../middlewares/auth/authorize.js';
 var router = express.Router();
 
-router.post('/', validateJob, (req, res, next) => {
+router.post('/', authorize('POST_jobs'), validateJob, (req, res, next) => {
   insertJob(req.body).then(() => {
     res.status(201).send()
   }).catch(err => {
@@ -13,7 +14,7 @@ router.post('/', validateJob, (req, res, next) => {
   });
 });
 
-router.get('/', (req, res, next) => {
+router.get('/', authorize('GET_jobs'), (req, res, next) => {
   const payload = {
     page: req.query.page?.toString() || '1',
     pageSize: req.query.pageSize?.toString() || '10'

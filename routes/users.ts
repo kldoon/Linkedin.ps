@@ -2,9 +2,11 @@ import express from 'express';
 import { validateUser } from '../middlewares/validation/user.js';
 import { insertUser, login, insertRole, insertPermission, getRoles } from '../controllers/user.js';
 import { authenticate } from '../middlewares/auth/authenticate.js';
+import { authorize } from '../middlewares/auth/authorize.js';
+
 var router = express.Router();
 
-router.post('/', validateUser, (req, res, next) => {
+router.post('/', authorize('POST_users'), validateUser, (req, res, next) => {
   insertUser(req.body).then(() => {
     res.status(201).send()
   }).catch(err => {
@@ -13,7 +15,7 @@ router.post('/', validateUser, (req, res, next) => {
   });
 });
 
-router.post('/role', authenticate, (req, res, next) => {
+router.post('/role', authorize('POST_users/role'), authenticate, (req, res, next) => {
   insertRole(req.body).then((data) => {
     res.status(201).send(data)
   }).catch(err => {
@@ -44,7 +46,7 @@ router.post('/login', (req, res) => {
     })
 });
 
-router.get('/roles', validateUser, async (req, res, next) => {
+router.get('/roles', authorize('GET_users/role'), authenticate, async (req, res, next) => {
   try {
     const roles = await getRoles();
     res.send(roles);
