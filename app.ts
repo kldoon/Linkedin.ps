@@ -6,7 +6,7 @@ import cors from 'cors';
 import multer from 'multer';
 import fs from 'fs';
 
-import dataSource from './db/dataSource.js';
+import dataSource, { initDB } from './db/dataSource.js';
 
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
@@ -88,6 +88,7 @@ app.use((err: any, req: any, res: any, next: any) => {
 app.listen(PORT, () => {
   logger(`App is listening on port ${PORT}`);
   console.log(`App is listening on port ${PORT}`);
+  initDB();
 });
 
 export default app;
