@@ -7,6 +7,7 @@ import bcrypt from 'bcrypt';
 import { In } from "typeorm";
 
 import dataSource from "../db/dataSource.js";
+
 import { Role } from "../db/entities/Role.js";
 import { Permission } from "../db/entities/Permission.js";
 
@@ -42,7 +43,10 @@ const login = async (email: string, password: string) => {
       email
     });
 
+    console.log(user);
+
     const passwordMatching = await bcrypt.compare(password, user?.password || '');
+    console.log(passwordMatching);
 
     if (user && passwordMatching) {
       const token = jwt.sign(

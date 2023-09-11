@@ -6,7 +6,7 @@ import { authorize } from '../middlewares/auth/authorize.js';
 
 var router = express.Router();
 
-router.post('/', authorize('POST_users'), validateUser, (req, res, next) => {
+router.post('/', validateUser, (req, res, next) => {
   insertUser(req.body).then(() => {
     res.status(201).send()
   }).catch(err => {
