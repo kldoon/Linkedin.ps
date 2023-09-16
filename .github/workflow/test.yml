@@ -1,0 +1,13 @@
+name: Test Pull Request Changes
+
+on:
+  pull_request:
+    branches:
+      - main    
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo "Hello from a pull request"
+        run: echo "Hello from a pull request"
