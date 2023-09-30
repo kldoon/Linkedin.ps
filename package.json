@@ -29,7 +29,8 @@
     "mysql": "^2.18.1",
     "typeorm": "^0.3.17",
     "typescript": "^5.2.2",
-    "validator": "^13.11.0"
+    "validator": "^13.11.0",
+    "winston": "^3.10.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.22.15",

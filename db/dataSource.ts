@@ -6,6 +6,7 @@ import { Job } from "./entities/Job.js";
 import { User } from "./entities/User.js";
 import { Role } from "./entities/Role.js";
 import { Permission } from "./entities/Permission.js";
+import baseLogger from "../logger.js";
 
 const dataSource = new DataSource({
   type: 'mysql',
@@ -30,9 +31,9 @@ const dataSource = new DataSource({
 
 export const initDB = async () =>
   await dataSource.initialize().then(() => {
-    console.log("Connected to DB!");
+    baseLogger.info("Connected to DB!");
   }).catch(err => {
-    console.error('Failed to connect to DB: ' + err);
+    baseLogger.error('Failed to connect to DB: ' + err)
   });
 
 export default dataSource;

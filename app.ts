@@ -15,6 +15,7 @@ import jobsRouter from './routes/jobs.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { authenticate } from './middlewares/auth/authenticate.js';
+import baseLogger from './logger.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -91,8 +92,7 @@ app.use((err: any, req: any, res: any, next: any) => {
 
 
 app.listen(PORT, () => {
-  logger(`App is listening on port ${PORT}`);
-  console.log(`App is listening on port ${PORT}`);
+  baseLogger.info(`App is listening on port ${PORT}`);
   initDB();
 });
 
