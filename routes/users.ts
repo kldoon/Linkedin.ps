@@ -45,8 +45,11 @@ router.post('/login', (req, res) => {
       res.cookie('loginTime', Date.now(), {
         maxAge: 60 * 60 * 1000
       });
-      
-      res.send(data.token);
+      res.cookie('token', data.token, {
+        maxAge: 60 * 60 * 1000
+      });
+
+      res.send();
     })
     .catch(err => {
       res.status(401).send(err);
@@ -64,6 +67,21 @@ router.get('/roles', authorize('GET_users/role'), authenticate, async (req, res,
 
 router.get('/', (req, res, next) => {
   res.send('respond with a resource');
+});
+
+router.get('/logout', (req, res, next) => {
+  res.cookie('fullName', '', {
+    maxAge: -1,  // This means the cookie will be deleted
+    expires: new Date(Date.now() - 1000)
+  });
+  res.cookie('loginTime', '', {
+    maxAge: -1
+  });
+  res.cookie('token', '', {
+    maxAge: -1
+  });
+
+  res.send();
 });
 
 export default router;

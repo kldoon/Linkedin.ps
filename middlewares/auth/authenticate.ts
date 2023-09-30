@@ -7,7 +7,7 @@ const authenticate = async (
   res: express.Response,
   next: express.NextFunction
 ) => {
-  const token = req.headers['authorization'] || '';
+  const token = req.headers['authorization'] || req.cookies['token'] || '';  
   let tokenIsValid;
   try {
     tokenIsValid = jwt.verify(token, process.env.SECRET_KEY || '');
