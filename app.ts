@@ -5,6 +5,7 @@ import logger from 'morgan';
 import cors from 'cors';
 import multer from 'multer';
 import fs from 'fs';
+import cookieParser from 'cookie-parser';
 
 import dataSource, { initDB } from './db/dataSource.js';
 
@@ -25,6 +26,7 @@ const PORT = 5000;
 app.use(cors({
   origin: "http://localhost:3000"
 }));
+app.use(cookieParser());
 
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
@@ -41,6 +43,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/jobs', authenticate, jobsRouter);

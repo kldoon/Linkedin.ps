@@ -56,7 +56,7 @@ const login = async (email: string, password: string) => {
         }
       );
 
-      return token;
+      return { token, fullName: user.fullName };
     } else {
       throw ("Invalid Username or password!");
     }

@@ -39,7 +39,14 @@ router.post('/login', (req, res) => {
 
   login(email, password)
     .then(data => {
-      res.send(data);
+      res.cookie('fullName', data.fullName, {
+        maxAge: 60 * 60 * 1000
+      });
+      res.cookie('loginTime', Date.now(), {
+        maxAge: 60 * 60 * 1000
+      });
+      
+      res.send(data.token);
     })
     .catch(err => {
       res.status(401).send(err);
