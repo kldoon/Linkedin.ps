@@ -6,12 +6,11 @@ import { authorize } from '../middlewares/auth/authorize.js';
 
 var router = express.Router();
 
-router.post('/', authorize('POST_users'), validateUser, (req, res, next) => {
+router.post('/', validateUser, (req, res, next) => {
   insertUser(req.body).then(() => {
-    res.status(201).send()
+    res.status(201).send();
   }).catch(err => {
-    console.error(err);
-    res.status(500).send(err);
+    next(err);
   });
 });
 
@@ -33,7 +32,7 @@ router.post('/permission', authenticate, (req, res, next) => {
   });
 });
 
-router.post('/login', (req, res) => {
+router.post('/login', (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
 
@@ -52,7 +51,10 @@ router.post('/login', (req, res) => {
       res.send();
     })
     .catch(err => {
-      res.status(401).send(err);
+      next({
+        code: "INVALID_CREDENTIALS",
+        message: err
+      });
     })
 });
 
@@ -61,12 +63,8 @@ router.get('/roles', authorize('GET_users/role'), authenticate, async (req, res,
     const roles = await getRoles();
     res.send(roles);
   } catch (error) {
-    res.status(500).send("Something went wrong");
+    next(error);
   }
-});
-
-router.get('/', (req, res, next) => {
-  res.send('respond with a resource');
 });
 
 router.get('/logout', (req, res, next) => {

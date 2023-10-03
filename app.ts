@@ -1,7 +1,6 @@
 import './config.js';
 import createError from 'http-errors';
 import express from 'express';
-import logger from 'morgan';
 import cors from 'cors';
 import multer from 'multer';
 import fs from 'fs';
@@ -16,6 +15,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { authenticate } from './middlewares/auth/authenticate.js';
 import baseLogger from './logger.js';
+import { error404Handler, errorLogger, errorSender } from './middlewares/errorHandlers/genericHandler.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -43,7 +43,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -75,21 +74,9 @@ app.get('/file', (req, res) => {
   }
 });
 
-// catch 404 and forward to error handler
-app.use((req, res, next) => {
-  next(createError(404));
-});
-
-// error handler
-app.use((err: any, req: any, res: any, next: any) => {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500).send(err);
-});
-
+app.use(errorLogger);
+app.use(errorSender);
+app.use(error404Handler);
 
 app.listen(PORT, () => {
   baseLogger.info(`App is listening on port ${PORT}`);

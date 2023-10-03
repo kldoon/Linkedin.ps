@@ -7,19 +7,26 @@ const validateUser = (req: express.Request,
 ) => {
   const values = ['fullName', 'email', 'password', 'type'];
   const user = req.body;
-  const errorList = [];
-  // const errorList = values.map(key => !user[key] && `${key} is Required!`).filter(Boolean);
+  const errorList: string[] = [];
+
   values.forEach(key => {
     if (!user[key]) {
-      return errorList.push(`${key} is Required!`);
+      errorList.push(`${key} is Required!`);
     }
   });
+
+  if (errorList.length) {
+    return next({
+      code: "INVALID_INPUT",
+      message: errorList.join(' ')
+    });
+  } 
 
   if (!isEmail.default(user.email)) {
     errorList.push('Email is not Valid');
   }
 
-  if (user.password.length < 6) {
+  if (user.password?.length < 6) {
     errorList.push('Password should contain at least 6 characters!');
   }
 
@@ -28,7 +35,10 @@ const validateUser = (req: express.Request,
   }
 
   if (errorList.length) {
-    res.status(400).send(errorList);
+    next({
+      code: "INVALID_INPUT",
+      message: errorList.join(', ')
+    });
   } else {
     next();
   }
