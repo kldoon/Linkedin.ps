@@ -46,6 +46,13 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// This code will only work if the environment is not production, i.e: development or testing
+if (process.env.NODE_ENV !== 'production') {
+  app.get('/dev_only_route', (req: express.Request, res: express.Response) => {
+    res.send("Only Developers can see this :D :D!");
+  });
+}
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/jobs', authenticate, jobsRouter);

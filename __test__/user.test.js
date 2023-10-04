@@ -17,22 +17,23 @@ const tmpData = {
 };
 
 describe("Login process", () => {
-  let token;
+  let data;
+
   beforeAll(async () => {
-    token = await login(tmpData.email, tmpData.password);
+    data = await login(tmpData.email, tmpData.password);
   })
 
   it("returns a token", async () => {
-    expect(token).toBeTruthy();
+    expect(data.token).toBeTruthy();
   });
 
   it("has a valid token", () => {
-    const tokenIsValid = jwt.verify(token, process.env.SECRET_KEY || '');
+    const tokenIsValid = jwt.verify(data.token, process.env.SECRET_KEY || '');
     expect(tokenIsValid).toBeTruthy();
   });
 
   it("has valid payload", () => {
-    const payload = jwt.decode(token, { json: true });
+    const payload = jwt.decode(data.token, { json: true });
     expect(payload?.email).toEqual(tmpData.email);
   });
 });
